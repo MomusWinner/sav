@@ -1,0 +1,97 @@
+Имя пакета,Имя файла исходного кода,Критичность,Номер строки,Имя функции,Предупреждение,Статус разметки маркера,Комментарий
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Critical,40,stack_push,"Due to the loop condition dependence on the values of array elements 'ctx->stack[i]', the loop at analyze.l:40 in function 'stack_push' can have an unbounded number of iterations, eventually leading to a buffer overflow.",ложно,Количество итераций ограничено размером ctx→stack MAX_INCLUDE_DEPTH 20.
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Critical,58,stack_pop,"Due to the loop condition dependence on the values of array elements 'ctx->stack[i]', the loop at analyze.l:58 in function 'stack_pop' can have an unbounded number of iterations, eventually leading to a buffer overflow.",ложно,Количество итераций ограничено размером ctx→stack MAX_INCLUDE_DEPTH 20.
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Critical,175,find_standard_incl_file,"Due to the loop condition dependence on the values of array elements 'ctx->stack[i]', the loop at analyze.l:175 in function 'find_standard_incl_file' can have an unbounded number of iterations, eventually leading to a buffer overflow.",ложно,Количество итераций ограничено размером ctx→stack MAX_INCLUDE_DEPTH 20.
+kbd-2.4.0-9,kbd-2.4.0/src/resizecons.c,Critical,273,main,"An element of array '&cmd[0]' of size 80, declared at resizecons.c:122, is accessed by an index with values in [0, +inf] at resizecons.c:273, which may lead to a buffer overflow. Details: Format string: 'Optional[restoretextmode -r %s\n]'.Filled values can have unlimited string length.",истинно,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.y,Critical,367,yyparse,An element of array 'yyvsa' is accessed by an index with possible negative value -3 at parser.y:367. This may lead to a buffer underflow. Index variable is assigned the value parser.y:367.,ложно,Сгенерированный код (Bison). Отрицательный индекс указывает на смещение в стеке.
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.c,Critical,1862,yyparse,Value -2 is used in function 'yysyntax_error' at parser.c:1862 by calling function 'yysyntax_error' to calculate an index for accessing an element of array. This may lead to a buffer underflow. The out of range index value is originated from parser.c:1862.,ложно,Сгенерированный код (Bison). Отрицательный индекс указывает на смещение в стеке.
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.c,Critical,1878,yyparse,Value -2 is used in function 'yysyntax_error' at parser.c:1878 by calling function 'yysyntax_error' to calculate an index for accessing an element of array. This may lead to a buffer underflow. The out of range index value is originated from parser.c:1878.,ложно,Сгенерированный код (Bison). Отрицательный индекс указывает на смещение в стеке.
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.c,Major,1107,yysyntax_error,"Accessing an array element with index 'yytoken' at parser.c:1073 can lead to a buffer underflow, since the index can have negative values, as indicated by a conditional expression at parser.c:1107.",ложно,Сгенерированный код (Bison). Отрицательный индекс указывает на смещение в стеке.
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.y,Normal,335,yyparse,"Pointer 'val', returned from function 'lk_array_get' at parser.y:334, may be NULL and is dereferenced at parser.y:335.",истинно,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.y,Normal,353,yyparse,"Pointer 'val', returned from function 'lk_array_get' at parser.y:351, may be NULL and is dereferenced at parser.y:353.",истинно,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/ksyms.c,Normal,262,kt_latin,"Pointer, returned from function with name 'get_sym' at ksyms.c:262, may be NULL and is dereferenced at ksyms.c:262 by calling function 'strcmp'.",ложно,"Функция get_sum может вернуть NULL, только если переданы невалидные ktype или index.
+В строчке 262 в функцию get_sum в аргумент ktype передаётся макрос KT_LATIN, а в index передаются значения в диапазоне [0, direction == TO_UNICODE ? 128 : syms[KT_LATIN].size).  
+
+Аргумент ktype всегда валиден, так как в него передаётся макрос.  
+
+Аргумент index всегда валиден, так как его значения должны быть меньше чем syms[LATIN].size. 
+В случае когда direction == TO_UNICODE это условие соблыдается,так как syms[KT_LATIN].size равен 256. (128 < 256). 
+В случае когда direction != TO_UNICODE  это условине также соблюдается так как в index передаются [0, syms[KT_LATIN].size). "
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/ksyms.c,Normal,299,ksymtocode,"Pointer, returned from function with name 'get_sym' at ksyms.c:299, may be NULL and is dereferenced at ksyms.c:299 by calling function 'strcmp'.",ложно,"В этом случае функция get_sym всегда будет возвращать валидные значения, так как мы итерируемся по константным syms_size и syms."
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/dump.c,Normal,221,lk_dump_ctable,"Pointer, returned from function 'lk_array_get_ptr' at dump.c:218, may be NULL and is dereferenced at dump.c:221.",истинно,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Normal,191,find_standard_incl_file,"Pointer 'pathname', returned from function 'kbdfile_get_pathname' at analyze.l:179, may be NULL and is dereferenced at analyze.l:191 by calling function 'readlink'.",ложно,"Ложно, поскольку перед вызовом функции  'kbdfile_get_pathname' производится проверка на NULL.  
+
+while (ctx->stack[i]) i++; // 175 строчка
+if (i == 0) return -1;
+i--; 
+pathname = kbdfile_get_pathname(ctx→stack[i]);
+
+---- kbdfile.c:62
+char * kbdfile_get_pathname(struct kbdfile *fp) {
+    if (!fp)
+         return NULL;
+    return fp→pathname;
+ } 
+
+---- contexP.h:28
+struct kbdfile {
+  struct kbdfile_ctx *ctx;
+  int flags;
+  FILE *fd;
+  char pathname[MAXPATHLEN];
+ }; "
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/dump.c,Major,221,lk_dump_ctable,"Return value of a function 'lk_array_get_ptr' is dereferenced at dump.c:221 without checking for NULL, but it is usually checked for this function (19/20).",истинно,
+kbd-2.4.0-9,kbd-2.4.0/src/libkfont/psfxtable.c,Minor,214,kfont_read_unicodetable,"The size of variable 'buf' is 65536 bytes, which is too big (defined at psfxtable.c:214).",ложно,Осознанное решение использовать буфер размером 65536 байт.
+kbd-2.4.0-9,kbd-2.4.0/src/libkfont/setfont.c,Minor,590,save_font,"The size of variable 'buf' is 65536 bytes, which is too big (defined at setfont.c:590).",ложно,Осознанное решение использовать буфер размером 65536 байт.
+kbd-2.4.0-9,kbd-2.4.0/src/libkfont/loadunimap.c,Minor,245,kfont_load_unicodemap,"The size of variable 'buffer' is 65536 bytes, which is too big (defined at loadunimap.c:245).",ложно,Осознанное решение использовать буфер размером 65536 байт.
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.c,Minor,1257,yyparse,"The size of variable 'yyvsa' is 104000 bytes, which is too big (defined at parser.c:1257).",ложно,Сгенерированный код (Bison).
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.c,Major,1862,yyparse,"Variable 'yytoken', which might receive a negative value at parser.c:1848, is used without checking at parser.c:1110 by passing as 4th parameter to function 'yysyntax_error' at parser.c:1862.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/common.c,Major,141,init_array,"Variable 'rc', which might receive a negative value at common.c:139 by calling function 'lk_array_init', is used without checking at common.c:141 by calling function 'strerror'.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/parser.c,Major,1869,yyparse,"Variable 'yymsg_alloc', which might receive a negative value at parser.c:1862 by calling function 'yysyntax_error', is used without checking at parser.c:1869 by calling function 'malloc'.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/dump.c,Minor,111,mk_mapname,"Use of vulnerable function 'strcat' at dump.c:111. This function is unsafe, use strncat instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Minor,151,find_incl_file_near_fn,"Use of vulnerable function 'strcat' at analyze.l:151. This function is unsafe, use strncat instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Minor,203,find_standard_incl_file,"Use of vulnerable function 'strcat' at analyze.l:203. This function is unsafe, use strncat instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/openvt.c,Minor,392,main,"Use of vulnerable function 'strcat' at openvt.c:392. This function is unsafe, use strncat instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Minor,150,find_incl_file_near_fn,"Use of vulnerable function 'strcpy' at analyze.l:150. This function is unsafe, use strncpy instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/loadkeys.c,Minor,165,deffuncs,"Use of vulnerable function 'strcpy' at loadkeys.c:165. This function is unsafe, use strncpy instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Minor,198,find_standard_incl_file,"Use of vulnerable function 'strcpy' at analyze.l:198. This function is unsafe, use strncpy instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkbdfile/kbdfile.c,Minor,115,pipe_open,"Use of vulnerable function 'sprintf' at kbdfile.c:115. This function is unsafe, use snprintf instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkbdfile/kbdfile.c,Minor,314,findfile_in_dir,"Use of vulnerable function 'sprintf' at kbdfile.c:314. This function is unsafe, use snprintf instead.",,
+kbd-2.4.0-9,kbd-2.4.0/src/vlock/username.c,Minor,45,get_username,Use of vulnerable function 'getenv' at username.c:45. System's environment variable can be controlled externally. Please use tzplatform_getenv() or use secure storage instead of getenv(),,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.l,Minor,225,find_incl_file,Use of vulnerable function 'getenv' at analyze.l:225. System's environment variable can be controlled externally. Please use tzplatform_getenv() or use secure storage instead of getenv(),,
+kbd-2.4.0-9,kbd-2.4.0/src/loadkeys.c,Minor,236,main,Use of vulnerable function 'getenv' at loadkeys.c:236. System's environment variable can be controlled externally. Please use tzplatform_getenv() or use secure storage instead of getenv(),,
+kbd-2.4.0-9,kbd-2.4.0/tests/libtswrap/ioctl.c,Minor,317,ioctl,Use of vulnerable function 'getenv' at ioctl.c:317. System's environment variable can be controlled externally. Please use tzplatform_getenv() or use secure storage instead of getenv(),,
+kbd-2.4.0-9,kbd-2.4.0/src/resizecons.c,Minor,366,main,Use of vulnerable function 'getenv' at resizecons.c:366. System's environment variable can be controlled externally. Please use tzplatform_getenv() or use secure storage instead of getenv(),,
+kbd-2.4.0-9,kbd-2.4.0/src/openvt.c,Minor,375,main,Use of vulnerable function 'getenv' at openvt.c:375. System's environment variable can be controlled externally. Please use tzplatform_getenv() or use secure storage instead of getenv(),,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/loadkeys.c,Minor,165,deffuncs,A string is copied into the buffer '&kbs.kb_string[0]' of size 512 without checking its length first at loadkeys.c:165.,,
+kbd-2.4.0-9,kbd-2.4.0/src/vlock/screen.c,Critical,70,init_screen,Integer value 'size' obtained from untrusted source at screen.c:66 by calling function 'read' without checking its bounds is used in a trusted operation at screen.c:70 by calling function 'malloc'.,,
+kbd-2.4.0-9,kbd-2.4.0/src/openvt.c,Critical,394,main,Variable 'cmd' is obtained from an untrusted source at openvt.c:394. The variable is used in a vulnerable operation at openvt.c:394 by calling function 'strcat'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-bkeymap.c,Critical,29,main,Variable 'argv[1]' is obtained from an untrusted source at libkeymap-bkeymap.c:29. The variable is used in a vulnerable operation at libkeymap-bkeymap.c:29 by calling function 'fopen'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-mktable.c,Critical,30,main,Variable 'argv[1]' is obtained from an untrusted source at libkeymap-mktable.c:30. The variable is used in a vulnerable operation at libkeymap-mktable.c:30 by calling function 'fopen'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-showmaps.c,Critical,31,main,Variable 'argv[1]' is obtained from an untrusted source at libkeymap-showmaps.c:31. The variable is used in a vulnerable operation at libkeymap-showmaps.c:31 by calling function 'fopen'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-dumpkeys.c,Critical,49,main,Variable 'argv[1]' is obtained from an untrusted source at libkeymap-dumpkeys.c:49. The variable is used in a vulnerable operation at libkeymap-dumpkeys.c:49 by calling function 'fopen'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/tests/libtswrap/ioctl.c,Critical,319,ioctl,Variable 'env' is obtained from an untrusted source at ioctl.c:317 by calling function 'getenv'. The variable is used in a vulnerable operation at ioctl.c:319 by calling function 'open'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/src/openvt.c,Critical,394,main,Variable 'argv[optind]' is obtained from an untrusted source at openvt.c:394. The variable is used in a vulnerable operation at openvt.c:394 by calling function 'strcat'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/src/openvt.c,Critical,475,main,Variable 'cmd' is obtained from an untrusted source at openvt.c:394. The variable is used in a vulnerable operation at openvt.c:475 by calling function 'execvp'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/src/setfont.c,Critical,167,main,Variable 'Ofil' is obtained from an untrusted source at setfont.c:95. The variable is used in a vulnerable operation at setfont.c:653 by passing as 3rd parameter to function 'kfont_save_font' at setfont.c:167. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/src/setfont.c,Critical,170,main,Variable 'ofil' is obtained from an untrusted source at setfont.c:99. The variable is used in a vulnerable operation at setfont.c:653 by passing as 3rd parameter to function 'kfont_save_font' at setfont.c:170. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/src/openvt.c,Critical,392,main,Variable 'def_cmd' is obtained from an untrusted source at openvt.c:375 by calling function 'getenv'. The variable is used in a vulnerable operation at openvt.c:392 by calling function 'strcat'. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/src/setfont.c,Critical,173,main,Variable 'omfil' is obtained from an untrusted source at setfont.c:103. The variable is used in a vulnerable operation at mapscrn.c:233 by passing as 3rd parameter to function 'kfont_save_consolemap' at setfont.c:173. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/src/setfont.c,Critical,176,main,Variable 'oufil' is obtained from an untrusted source at setfont.c:107. The variable is used in a vulnerable operation at loadunimap.c:318 by passing as 3rd parameter to function 'kfont_save_unicodemap' at setfont.c:176. Please double check if input string is properly validated in error-prone manner,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-bkeymap.c,Critical,28,main,Copying from tainted string 'argv[1]' to 'fp->pathname' at libkeymap-bkeymap.c:28 may form a non-null-terminated C string of unknown size.,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-mktable.c,Critical,29,main,Copying from tainted string 'argv[1]' to 'fp->pathname' at libkeymap-mktable.c:29 may form a non-null-terminated C string of unknown size.,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-showmaps.c,Critical,30,main,Copying from tainted string 'argv[1]' to 'fp->pathname' at libkeymap-showmaps.c:30 may form a non-null-terminated C string of unknown size.,,
+kbd-2.4.0-9,kbd-2.4.0/tests/helpers/libkeymap-dumpkeys.c,Critical,48,main,Copying from tainted string 'argv[1]' to 'fp->pathname' at libkeymap-dumpkeys.c:48 may form a non-null-terminated C string of unknown size.,,
+kbd-2.4.0-9,kbd-2.4.0/tests/libkeymap/libkeymap-test09.c,Minor,20,main,"Return value of function 'setenv', called at libkeymap-test09.c:20, is not checked. The return value possibly contains an error code and ignoring it may lead to missing important errors.",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/summary.c,Normal,44,maximum_val,"Return value of function 'ioctl', called at summary.c:44, is not checked, but it is usually checked for this function (72/76).",,
+kbd-2.4.0-9,kbd-2.4.0/src/libkfont/setfont.c,Major,368,kfont_load_fonts,Uninitialized data is read from local variable 'ptr' at setfont.c:368.,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkbdfile/kbdfile.c,Normal,346,findfile_in_dir,This statement in the source code might be unreachable during program execution.,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/kernel.c,Normal,27,lk_kernel_keys,This statement in the source code might be unreachable during program execution.,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/kernel.c,Normal,32,lk_kernel_keys,This statement in the source code might be unreachable during program execution.,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/kernel.c,Normal,66,lk_kernel_funcs,This statement in the source code might be unreachable during program execution.,,
+kbd-2.4.0-9,kbd-2.4.0/src/setleds.c,Normal,341,main,This statement in the source code might be unreachable during program execution.,,
+kbd-2.4.0-9,kbd-2.4.0/src/setleds.c,Normal,376,main,This statement in the source code might be unreachable during program execution.,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkbdfile/kbdfile.c,Normal,178,findfile_by_fullname,This statement in the source code might be unreachable during program execution.,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkfont/setfont.c,Normal,146,do_loadfont,The label 'case 2:' can't be reached at setfont.c:146. All possible values of 'erase_mode': 1,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkfont/setfont.c,Normal,143,do_loadfont,The label 'case 3:' can't be reached at setfont.c:143. All possible values of 'erase_mode': 1,,
+kbd-2.4.0-9,kbd-2.4.0/src/libkeymap/analyze.c,Minor,2893,yylex_destroy,Function parameter 'yyscanner' is rewritten with unused value at analyze.c:2893.,,
