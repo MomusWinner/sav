@@ -151,34 +151,34 @@ main :: proc() {
 			}
 		}
 
-		update_camera(&camera, 20, 5)
-
-		mouse := screen_to_world_2d(ve.get_mouse_position(), camera)
-
-		if ve.is_mouse_button_down(.Left) {
-			if g.mouse_state.node_id == -1 {
-				for &n, i in nodes {
-					dist := linalg.length_vec2(mouse - n.position)
-					if dist < n.radius + 0.1 {
-						g.mouse_state.node_id = i
+		if !ve.screen_resized() {
+			update_camera(&camera, 20, 5)
+			mouse := screen_to_world_2d(ve.get_mouse_position(), camera)
+			if ve.is_mouse_button_down(.Left) {
+				if g.mouse_state.node_id == -1 {
+					for &n, i in nodes {
+						dist := linalg.length_vec2(mouse - n.position)
+						if dist < n.radius + 0.1 {
+							g.mouse_state.node_id = i
+						}
 					}
 				}
-			}
-			if g.mouse_state.node_id != -1 {
-				nodes[g.mouse_state.node_id].position = mouse
-			} else {
-				prev, has_prev := g.mouse_state.prev_position.?
-				if !has_prev {
-					g.mouse_state.prev_position = ve.get_mouse_position()
-					g.mouse_state.prev_camera_position = camera.position
+				if g.mouse_state.node_id != -1 {
+					nodes[g.mouse_state.node_id].position = mouse
+				} else {
+					prev, has_prev := g.mouse_state.prev_position.?
+					if !has_prev {
+						g.mouse_state.prev_position = ve.get_mouse_position()
+						g.mouse_state.prev_camera_position = camera.position
+					}
 				}
+			} else {
+				g.mouse_state.node_id = -1
+				g.mouse_state.prev_position = nil
 			}
-		} else {
-			g.mouse_state.node_id = -1
-			g.mouse_state.prev_position = nil
-		}
 
-		update_nodes(nodes[:])
+			update_nodes(nodes[:])
+		}
 
 		// set_uicamera(&uicamera)
 		ve.set_camera(camera)
