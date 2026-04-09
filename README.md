@@ -1,6 +1,6 @@
 # SAV (Svace Analysis Visualizer)
 
-https://github.com/user-attachments/assets/96eae2fa-6df3-4fd0-be80-20057954a9d9
+https://github.com/user-attachments/assets/c4d058d6-2a8d-48ca-a8e9-d445faf4eafc
 
 # Description
 
