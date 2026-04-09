@@ -16,6 +16,7 @@ import "lib:ve"
 import vemath "lib:ve/math"
 
 TARGET_FPS :: 120
+FIXED_DELTA_TIME :: 1.0 / TARGET_FPS
 
 // Color palette: https://lospec.com/palette-list/vint-hs
 BACKGROUND := linerize({0.913, 0.964, 0.882})
@@ -151,38 +152,33 @@ main :: proc() {
 			}
 		}
 
-		window_pos := get_window_position_vec2()
-		window_is_moving := linalg.length(window_pos - prev_window_pos) > 0.0001
-		prev_window_pos = window_pos
 
-		if !ve.screen_resized() && !window_is_moving {
-			update_camera(&camera, 20, 5)
-			mouse := screen_to_world_2d(ve.mouse_get_position(), camera)
-			if ve.mouse_button_is_down(.Left) {
-				if g.mouse_state.node_id == -1 {
-					for &n, i in nodes {
-						dist := linalg.length_vec2(mouse - n.position)
-						if dist < n.radius + 0.1 {
-							g.mouse_state.node_id = i
-						}
+		update_camera(&camera, 20, 5)
+		mouse := screen_to_world_2d(ve.mouse_get_position(), camera)
+		if ve.mouse_button_is_down(.Left) {
+			if g.mouse_state.node_id == -1 {
+				for &n, i in nodes {
+					dist := linalg.length_vec2(mouse - n.position)
+					if dist < n.radius + 0.1 {
+						g.mouse_state.node_id = i
 					}
 				}
-				if g.mouse_state.node_id != -1 {
-					nodes[g.mouse_state.node_id].position = mouse
-				} else {
-					prev, has_prev := g.mouse_state.prev_position.?
-					if !has_prev {
-						g.mouse_state.prev_position = ve.mouse_get_position()
-						g.mouse_state.prev_camera_position = camera.position
-					}
-				}
-			} else {
-				g.mouse_state.node_id = -1
-				g.mouse_state.prev_position = nil
 			}
-
-			update_nodes(nodes[:])
+			if g.mouse_state.node_id != -1 {
+				nodes[g.mouse_state.node_id].position = mouse
+			} else {
+				prev, has_prev := g.mouse_state.prev_position.?
+				if !has_prev {
+					g.mouse_state.prev_position = ve.mouse_get_position()
+					g.mouse_state.prev_camera_position = camera.position
+				}
+			}
+		} else {
+			g.mouse_state.node_id = -1
+			g.mouse_state.prev_position = nil
 		}
+
+		update_nodes(nodes[:])
 
 		ve.set_camera(camera)
 
@@ -232,16 +228,16 @@ update_camera :: proc(c: ^ve.Camera, speed: f32, zoom_speed: f32 = 3) {
 	forward := ve.camera_get_forward(c^)
 
 	if ve.key_is_down(.W) {
-		c.position.y += speed * ve.time_get_delta()
+		c.position.y += speed * FIXED_DELTA_TIME
 	}
 	if ve.key_is_down(.S) {
-		c.position.y -= speed * ve.time_get_delta()
+		c.position.y -= speed * FIXED_DELTA_TIME
 	}
 	if ve.key_is_down(.A) {
-		c.position.x -= speed * ve.time_get_delta()
+		c.position.x -= speed * FIXED_DELTA_TIME
 	}
 	if ve.key_is_down(.D) {
-		c.position.x += speed * ve.time_get_delta()
+		c.position.x += speed * FIXED_DELTA_TIME
 	}
 
 	c.target = c.position + forward
@@ -442,7 +438,7 @@ update_nodes :: proc(nodes: []Node) {
 
 				c := 1 - length / COLLIDE_DISTANCE
 				c *= COLLIDE_STRENGTH
-				force := c * linalg.normalize_vec2(dir) * ve.time_get_delta()
+				force := c * linalg.normalize_vec2(dir) * FIXED_DELTA_TIME
 				node_add_force(&ni, -force)
 				node_add_force(&nj, force)
 			}
@@ -469,9 +465,9 @@ update_nodes :: proc(nodes: []Node) {
 			if length <= target_length do continue
 			x = (x / length) * (length - target_length)
 			dv := end2.velocity - end1.velocity
-			force := (stiffness * x - dv * DAMPING) * ve.time_get_delta()
-			node_add_force(end1, -force * ve.time_get_delta())
-			node_add_force(end2, force * ve.time_get_delta())
+			force := (stiffness * x - dv * DAMPING) * FIXED_DELTA_TIME
+			node_add_force(end1, -force * FIXED_DELTA_TIME)
+			node_add_force(end2, force * FIXED_DELTA_TIME)
 		}
 	}
 
