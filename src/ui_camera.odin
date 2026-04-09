@@ -26,7 +26,7 @@ uicamera_set_pos :: proc(c: ^UICamera, pos: vec2) {
 }
 
 set_uicamera :: proc(c: ^UICamera) {
-	projection := math.ortho(0, cast(f32)ve.get_screen_width(), cast(f32)ve.get_screen_height(), 0, -1.0, 1.0)
+	projection := math.ortho(0, cast(f32)ve.screen_get_width(), cast(f32)ve.screen_get_height(), 0, -1.0, 1.0)
 	ubo_camera_set_projection(c.ubo, projection)
 	// ubo_camera_set_view(c.ubo, _uicamera_get_view(c))
 	// ubo_camera_set_position(c.ubo, c.position)

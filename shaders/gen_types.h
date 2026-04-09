@@ -5,14 +5,6 @@
 
 #include "buildin:bindless.h"
 
-// Base_UBO
-RegisterUniform(BaseUBO, {
-	vec3 color;
-});
-
-#define getBaseUBO(handle) GetResource(BaseUBO, handle)
-
-
 // Text_UBO
 RegisterUniform(TextUBO, {
 	uint glyph;
@@ -20,6 +12,14 @@ RegisterUniform(TextUBO, {
 });
 
 #define getTextUBO(handle) GetResource(TextUBO, handle)
+
+
+// Base_UBO
+RegisterUniform(BaseUBO, {
+	vec3 color;
+});
+
+#define getBaseUBO(handle) GetResource(BaseUBO, handle)
 
 
 // Camera_UBO
