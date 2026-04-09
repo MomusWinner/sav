@@ -4,7 +4,7 @@ BIN_DIR := bin
 DEBUG_BIN := $(BIN_DIR)/debug/$(APP_NAME)
 RELEASE_BIN := $(BIN_DIR)/release/$(APP_NAME)
 
-ODIN_FLAGS := -custom-attribute:buffer -collection:lib=./lib/
+ODIN_FLAGS := -custom-attribute:buffer -collection:lib=./lib/ -define:GLFW_SHARED=false
 ODIN_DEBUG_FLAGS := -debug ${ODIN_FLAGS}
 ODIN_RELEASE_FLAGS := -o:speed -no-bounds-check -disable-assert ${ODIN_FLAGS}
 ODIN := odin
@@ -26,14 +26,14 @@ debug:
 release:
 	@echo "Building release examples ..."
 	@mkdir -p $(BIN_DIR)/release
-	$(ODIN) build $(SRC_DIR) -out:$(RELEASE_BIN) -o:speed ${ODIN_FLAGS}
+	$(ODIN) build $(SRC_DIR) -out:$(RELEASE_BIN) ${ODIN_RELEASE_FLAGS}
 	@echo "Built: $(RELEASE_BIN)"
 
 .PHONY: release-win
 release-win:
 	@echo "Building release examples ..."
 	@mkdir -p $(BIN_DIR)/release
-	$(ODIN) build $(SRC_DIR) -target:windows_amd64 -out:$(RELEASE_BIN).exe -o:speed ${ODIN_FLAGS}
+	$(ODIN) build $(SRC_DIR) -target:windows_amd64 -out:$(RELEASE_BIN).exe ${ODIN_RELEASE_FLAGS}
 	@echo "Built: $(RELEASE_BIN)"
 
 .PHONY: run
